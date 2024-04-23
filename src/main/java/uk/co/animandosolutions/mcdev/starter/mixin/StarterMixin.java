@@ -1,4 +1,4 @@
-package uk.co.animandosolutions.moddev.starter.mixin;
+package uk.co.animandosolutions.mcdev.starter.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

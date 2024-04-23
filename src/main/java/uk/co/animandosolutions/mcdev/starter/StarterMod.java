@@ -3,6 +3,7 @@ package uk.co.animandosolutions.mcdev.starter;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.text.Text;
+import uk.co.animandosolutions.mcdev.starter.config.StarterConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ public class StarterMod implements ModInitializer {
     // It is considered best practice to use your mod id as the logger's name.
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("starter");
+    public static final StarterConfig CONFIG = StarterConfig.createAndLoad();
 
     @Override
     public void onInitialize() {
@@ -22,8 +24,10 @@ public class StarterMod implements ModInitializer {
         // Proceed with mild caution.
 
         LOGGER.info("Hello Fabric world!");
+        LOGGER.info("Channel %s"+CONFIG.discordChannelId());
 
         registerFooCommand();
+
     }
 
     private void registerFooCommand() {
