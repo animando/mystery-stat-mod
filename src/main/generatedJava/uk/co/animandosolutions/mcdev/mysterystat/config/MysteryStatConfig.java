@@ -1,34 +1,34 @@
-package uk.co.animandosolutions.mcdev.starter.config;
+package uk.co.animandosolutions.mcdev.mysterystat.config;
 
 import blue.endless.jankson.Jankson;
 import io.wispforest.owo.config.ConfigWrapper;
 import io.wispforest.owo.config.Option;
 import java.util.function.Consumer;
 
-public class StarterConfig extends ConfigWrapper<uk.co.animandosolutions.mcdev.starter.config.ConfigModel> {
+public class MysteryStatConfig extends ConfigWrapper<uk.co.animandosolutions.mcdev.mysterystat.config.ConfigModel> {
 
     public final Keys keys = new Keys();
 
     private final Option<java.lang.Long> discordChannelId = this.optionForKey(this.keys.discordChannelId);
     private final Option<java.lang.Boolean> publishResults = this.optionForKey(this.keys.publishResults);
-    private final Option<java.lang.String> discordChannelWebhook = this.optionForKey(this.keys.discordChannelWebhook);
+    private final Option<java.lang.String> discordBotToken = this.optionForKey(this.keys.discordBotToken);
 
-    private StarterConfig() {
-        super(uk.co.animandosolutions.mcdev.starter.config.ConfigModel.class);
+    private MysteryStatConfig() {
+        super(uk.co.animandosolutions.mcdev.mysterystat.config.ConfigModel.class);
     }
 
-    private StarterConfig(Consumer<Jankson.Builder> janksonBuilder) {
-        super(uk.co.animandosolutions.mcdev.starter.config.ConfigModel.class, janksonBuilder);
+    private MysteryStatConfig(Consumer<Jankson.Builder> janksonBuilder) {
+        super(uk.co.animandosolutions.mcdev.mysterystat.config.ConfigModel.class, janksonBuilder);
     }
 
-    public static StarterConfig createAndLoad() {
-        var wrapper = new StarterConfig();
+    public static MysteryStatConfig createAndLoad() {
+        var wrapper = new MysteryStatConfig();
         wrapper.load();
         return wrapper;
     }
 
-    public static StarterConfig createAndLoad(Consumer<Jankson.Builder> janksonBuilder) {
-        var wrapper = new StarterConfig(janksonBuilder);
+    public static MysteryStatConfig createAndLoad(Consumer<Jankson.Builder> janksonBuilder) {
+        var wrapper = new MysteryStatConfig(janksonBuilder);
         wrapper.load();
         return wrapper;
     }
@@ -49,19 +49,19 @@ public class StarterConfig extends ConfigWrapper<uk.co.animandosolutions.mcdev.s
         publishResults.set(value);
     }
 
-    public java.lang.String discordChannelWebhook() {
-        return discordChannelWebhook.value();
+    public java.lang.String discordBotToken() {
+        return discordBotToken.value();
     }
 
-    public void discordChannelWebhook(java.lang.String value) {
-        discordChannelWebhook.set(value);
+    public void discordBotToken(java.lang.String value) {
+        discordBotToken.set(value);
     }
 
 
     public static class Keys {
         public final Option.Key discordChannelId = new Option.Key("discordChannelId");
         public final Option.Key publishResults = new Option.Key("publishResults");
-        public final Option.Key discordChannelWebhook = new Option.Key("discordChannelWebhook");
+        public final Option.Key discordBotToken = new Option.Key("discordBotToken");
     }
 }
 

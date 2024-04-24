@@ -1,13 +1,12 @@
-package uk.co.animandosolutions.mcdev.starter.config;
+package uk.co.animandosolutions.mcdev.mysterystat.config;
 
 import io.wispforest.owo.config.annotation.Config;
 import io.wispforest.owo.config.annotation.Modmenu;
 
-@Modmenu(modId = "starter")
-@Config(name = "starter", wrapperName = "StarterConfig")
+@Modmenu(modId = "mystery-stat")
+@Config(name = "mystery-stat", wrapperName = "MysteryStatConfig")
 public class ConfigModel {
     public long discordChannelId = -1L;
     public boolean publishResults = false;
-
-    public String discordChannelWebhook = "";
+    public String discordBotToken = "";
 }

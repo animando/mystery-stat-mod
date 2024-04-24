@@ -1,4 +1,4 @@
-package uk.co.animandosolutions.mcdev.starter;
+package uk.co.animandosolutions.mcdev.mysterystat;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import static net.minecraft.server.command.CommandManager.*;
 
-public class StarterMod implements ModInitializer {
+public class MysteryStatMod implements ModInitializer {
     // This logger is used to write text to the console and the log file.
     // It is considered best practice to use your mod id as the logger's name.
     // That way, it's clear which mod wrote info, warnings, and errors.
-    public static final Logger LOGGER = LoggerFactory.getLogger("starter");
+    public static final Logger LOGGER = LoggerFactory.getLogger("mystery-stat");
 
     @Override
     public void onInitialize() {

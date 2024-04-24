@@ -1,0 +1,5 @@
+{
+    "text.config.mystery-stat.option.discordChannelId": "Discord Channel Id",
+    "text.config.mystery-stat.option.publishResults": "Publish Results",
+    "text.config.mystery-stat.option.discordBotToken": "Discord Bot Token"
+}

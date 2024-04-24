@@ -25,7 +25,7 @@ loom {
     splitEnvironmentSourceSets()
 
 	mods {
-		"starter" {
+		"mystery-stat" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -101,7 +101,7 @@ publishing {
 	}
 }
 sourceSets.main.java.srcDirs += [ 'src/main/generatedJava' ]
-// compileJava.options.generatedSourceOutputDirectory = file("${projectDir}/src/main/generatedJava/uk/co/animandosolutions/mcdev/starter/config")
+// compileJava.options.generatedSourceOutputDirectory = file("${projectDir}/src/main/generatedJava/uk/co/animandosolutions/mcdev/mystery-stat/config")
 
 remapJar {
     // wait until the shadowJar is done

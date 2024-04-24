@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "starter",
+	"id": "mystery-stat",
 	"version": "${version}",
-	"name": "Starter mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Mystery Stat",
+	"description": "Implements a mystery stat game",
 	"authors": [
 		"Me!"
 	],
@@ -12,13 +12,16 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/starter/icon.png",
+	"icon": "assets/mystery-stat/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"uk.co.animandosolutions.mcdev.starter.StarterMod"
+			"uk.co.animandosolutions.mcdev.mysterystat.MysteryStatMod"
 		]
 	},
+	"mixins": [
+		"mystery-stat.mixins.json"
+	],
 	"depends": {
 		"fabricloader": ">=0.15.7",
 		"minecraft": "~1.20.4",

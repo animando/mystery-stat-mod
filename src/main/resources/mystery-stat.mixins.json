@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "uk.co.animandosolutions.mcdev.starter.mixin",
+	"package": "uk.co.animandosolutions.mcdev.mysterystat.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"StarterMixin"
+		"MysteryStatMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
