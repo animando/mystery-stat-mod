@@ -12,7 +12,7 @@ public class DiscordBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("mystery-stat");
 
     public static boolean checkConfig() {
-        return (CONFIG.discordBotToken().equals("") && CONFIG.discordChannelId() != -1);
+        return (!CONFIG.discordBotToken().equals("") && CONFIG.discordChannelId() != -1);
     }
 
     public static void sendMessage(String messageContent) {
