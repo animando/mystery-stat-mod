@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 version = project.mod_version
@@ -42,11 +43,17 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-
     modImplementation "io.wispforest:owo-lib:${project.owo_version}"
 	// annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
     include "io.wispforest:owo-sentinel:${project.owo_version}"
 
+	modImplementation "com.discord4j:discord4j-core:3.2.6"
+	shadow "com.discord4j:discord4j-core:3.2.6"
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    exclude("META-INF")
 }
 
 processResources {
@@ -95,3 +102,11 @@ publishing {
 }
 sourceSets.main.java.srcDirs += [ 'src/main/generatedJava' ]
 // compileJava.options.generatedSourceOutputDirectory = file("${projectDir}/src/main/generatedJava/uk/co/animandosolutions/mcdev/starter/config")
+
+remapJar {
+    // wait until the shadowJar is done
+    dependsOn(shadowJar)
+    mustRunAfter(shadowJar)
+    // Set the input jar for the task. Here use the shadow Jar that include the .class of the transitive dependency
+    inputFile = file(shadowJar.archivePath)
+}
