@@ -4,16 +4,10 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.text.Text;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static net.minecraft.server.command.CommandManager.*;
+import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 public class MysteryStatMod implements ModInitializer {
-    // This logger is used to write text to the console and the log file.
-    // It is considered best practice to use your mod id as the logger's name.
-    // That way, it's clear which mod wrote info, warnings, and errors.
-    public static final Logger LOGGER = LoggerFactory.getLogger("mystery-stat");
 
     @Override
     public void onInitialize() {
@@ -21,7 +15,7 @@ public class MysteryStatMod implements ModInitializer {
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
 
-        LOGGER.info("Hello Fabric world!");
+        LOGGER.info("Loaded MysteryStat mod");
 
         registerFooCommand();
         DiscordBot.sendMessage("mod initialized");
