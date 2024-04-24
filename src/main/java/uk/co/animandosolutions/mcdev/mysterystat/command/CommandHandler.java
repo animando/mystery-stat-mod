@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.server.command.PublishCommand;
 import net.minecraft.server.command.ServerCommandSource;
 
 record Argument(String name, boolean optional) {
@@ -21,7 +22,7 @@ public class CommandHandler {
 	public static final CommandHandler INSTANCE = new CommandHandler();
 
 	List<CommandDefinition> subCommands = Arrays.asList(new AddMysteryStat(), new ListScores(), new ClearObjective(),
-			new ActivateObjective());
+			new ActivateObjective(), new PublishScores());
 
 	private CommandHandler() {
 	}

@@ -13,9 +13,11 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
+import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
-public class ListScores implements CommandDefinition {
+public class PublishScores implements CommandDefinition {
+	DiscordBot discord = DiscordBot.INSTANCE;
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
@@ -30,20 +32,20 @@ public class ListScores implements CommandDefinition {
 		}
 
 		ScoreboardObjective objective = maybeObjective.get();
-		listScores(source, scoreboard, objective);
+		publishScores(source, scoreboard, objective);
 
 		return 1;
 	}
 
-	private void listScores(ServerCommandSource source, ServerScoreboard scoreboard, ScoreboardObjective objective) {
+	private void publishScores(ServerCommandSource source, ServerScoreboard scoreboard, ScoreboardObjective objective) {
 		List<ObjectiveHelper.Score> topThree = ObjectiveHelper.getTopThree(scoreboard, objective);
 
-		sendMessage(source, format("Mystery Stat Leaderboard (%s)", objective.getDisplayName()));
+		discord.sendMessage(format("Mystery Stat Leaderboard (%s)", objective.getDisplayName().getLiteralString()));
 		if (topThree.size() == 0) {
-			sendMessage(source, "<empty list>");
+			discord.sendMessage("<empty list>");
 		}
 		for (int position = topThree.size(); position >= 1; position--) {
-			sendMessage(source, formatListEntry(topThree.get(position - 1), position));
+			discord.sendMessage(formatListEntry(topThree.get(position - 1), position));
 		}
 	}
 
@@ -62,7 +64,7 @@ public class ListScores implements CommandDefinition {
 
 	@Override
 	public String getCommand() {
-		return "list";
+		return "publish";
 	}
 
 	@Override
