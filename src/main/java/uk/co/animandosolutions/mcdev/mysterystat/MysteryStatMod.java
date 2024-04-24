@@ -3,6 +3,7 @@ package uk.co.animandosolutions.mcdev.mysterystat;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.text.Text;
+import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
 
 import static net.minecraft.server.command.CommandManager.*;
 import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;

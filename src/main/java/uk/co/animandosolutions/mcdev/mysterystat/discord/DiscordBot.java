@@ -1,14 +1,14 @@
-package uk.co.animandosolutions.mcdev.mysterystat;
+package uk.co.animandosolutions.mcdev.mysterystat.discord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
-import uk.co.animandosolutions.mcdev.mysterystat.config.MysteryStatConfig;
+
+import static uk.co.animandosolutions.mcdev.mysterystat.config.ConfigWrapper.CONFIG;
 
 public class DiscordBot {
-    public static final MysteryStatConfig CONFIG = MysteryStatConfig.createAndLoad();
     public static final Logger LOGGER = LoggerFactory.getLogger("mystery-stat");
 
     public static boolean checkConfig() {
