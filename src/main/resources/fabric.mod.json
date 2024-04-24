@@ -17,18 +17,8 @@
 	"entrypoints": {
 		"main": [
 			"uk.co.animandosolutions.mcdev.starter.StarterMod"
-		],
-		"client": [
-			"uk.co.animandosolutions.mcdev.starter.StarterModClient"
 		]
 	},
-	"mixins": [
-		"starter.mixins.json",
-		{
-			"config": "starter.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.15.7",
 		"minecraft": "~1.20.4",
