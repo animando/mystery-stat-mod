@@ -6,7 +6,7 @@ import io.wispforest.owo.config.annotation.Modmenu;
 @Modmenu(modId = "starter")
 @Config(name = "starter", wrapperName = "StarterConfig")
 public class ConfigModel {
-    public int discordChannelId = -1;
+    public long discordChannelId = -1L;
     public boolean publishResults = false;
 
     public String discordChannelWebhook = "";

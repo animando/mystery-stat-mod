@@ -9,7 +9,7 @@ public class StarterConfig extends ConfigWrapper<uk.co.animandosolutions.mcdev.s
 
     public final Keys keys = new Keys();
 
-    private final Option<java.lang.Integer> discordChannelId = this.optionForKey(this.keys.discordChannelId);
+    private final Option<java.lang.Long> discordChannelId = this.optionForKey(this.keys.discordChannelId);
     private final Option<java.lang.Boolean> publishResults = this.optionForKey(this.keys.publishResults);
     private final Option<java.lang.String> discordChannelWebhook = this.optionForKey(this.keys.discordChannelWebhook);
 
@@ -33,11 +33,11 @@ public class StarterConfig extends ConfigWrapper<uk.co.animandosolutions.mcdev.s
         return wrapper;
     }
 
-    public int discordChannelId() {
+    public long discordChannelId() {
         return discordChannelId.value();
     }
 
-    public void discordChannelId(int value) {
+    public void discordChannelId(long value) {
         discordChannelId.set(value);
     }
 
