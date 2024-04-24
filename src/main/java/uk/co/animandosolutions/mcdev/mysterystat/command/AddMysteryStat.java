@@ -50,9 +50,9 @@ public class AddMysteryStat implements CommandDefinition {
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
-						false),
+						false, 4),
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string(),
-						false), };
+						false, 4), };
 	}
 
 }

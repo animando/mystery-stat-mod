@@ -70,7 +70,7 @@ public class PublishScores implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, 4) };
 	}
 
 }

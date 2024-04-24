@@ -10,7 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
 
 public interface CommandDefinition {
-	public record Argument<T>(String name, ArgumentType<T> argumentType, boolean optional) {
+	public record Argument<T>(String name, ArgumentType<T> argumentType, boolean optional, int permissionLevel) {
 	}
 
 	String getCommand();
@@ -39,5 +39,9 @@ public interface CommandDefinition {
 	
 	default <V> Optional<V> getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz) {
 		return getOptionalArgument(context, argumentName, clazz);
+	}
+	
+	default int getPermissionLevel() {
+		return 4;
 	}
 }

@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.PublishCommand;
 import net.minecraft.server.command.ServerCommandSource;
 
 record Argument(String name, boolean optional) {
@@ -29,12 +28,13 @@ public class CommandHandler {
 
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT).requires(hasOperatorPermission());
+			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT);
 
 			subCommands.forEach(subCommandDefinition -> {
 
 				String subCommand = subCommandDefinition.getCommand();
-				var subCommandBuilder = literal(subCommand);
+				var subCommandBuilder = literal(subCommand)
+						.requires(source -> source.hasPermissionLevel(subCommandDefinition.getPermissionLevel()));
 
 				var args = subCommandDefinition.getArguments();
 				RequiredArgumentBuilder<ServerCommandSource, String> argBuilder = null;
@@ -43,7 +43,7 @@ public class CommandHandler {
 					var finalArg = i == args.length - 1;
 
 					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(),
-							string());
+							string()).requires(source -> source.hasPermissionLevel(arg.permissionLevel()));
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
 					}

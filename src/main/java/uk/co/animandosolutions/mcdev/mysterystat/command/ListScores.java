@@ -1,7 +1,6 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
-import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Optional;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,10 +21,13 @@ public class ListScores implements CommandDefinition {
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
 		var scoreboard = context.getSource().getServer().getScoreboard();
-		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME).orElseThrow();
-		String objectiveName = fullyQualifiedObjectiveName(objectiveNameArg);
+		Optional<String> objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME).map(ObjectiveHelper::fullyQualifiedObjectiveName);
 
-		Optional<ScoreboardObjective> maybeObjective = getScoreboardObjective(source, scoreboard, objectiveName);
+		Optional<ScoreboardObjective> maybeObjective =
+				objectiveNameArg.isPresent() ? 
+						getScoreboardObjective(source, scoreboard, objectiveNameArg.get()) :
+							Optional.of(scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
+		
 		if (maybeObjective.isEmpty()) {
 			return 0;
 		}
@@ -38,7 +41,7 @@ public class ListScores implements CommandDefinition {
 	private void listScores(ServerCommandSource source, ServerScoreboard scoreboard, ScoreboardObjective objective) {
 		List<ObjectiveHelper.Score> topThree = ObjectiveHelper.getTopThree(scoreboard, objective);
 
-		sendMessage(source, format("Mystery Stat Leaderboard (%s)", objective.getDisplayName()));
+		sendMessage(source, format("Mystery Stat Leaderboard (%s)", objective.getDisplayName().getLiteralString()));
 		if (topThree.size() == 0) {
 			sendMessage(source, "<empty list>");
 		}
@@ -68,7 +71,12 @@ public class ListScores implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), true, 4) };
+	}
+
+	@Override
+	public int getPermissionLevel() {
+		return 0;
 	}
 
 }
