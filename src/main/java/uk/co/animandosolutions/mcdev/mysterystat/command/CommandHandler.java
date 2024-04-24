@@ -20,7 +20,8 @@ public class CommandHandler {
 
 	public static final CommandHandler INSTANCE = new CommandHandler();
 
-	List<CommandDefinition> subCommands = Arrays.asList(new AddMysteryStat(), new ListScores(), new ClearObjectives());
+	List<CommandDefinition> subCommands = Arrays.asList(new AddMysteryStat(), new ListScores(), new ClearObjective(),
+			new ActivateObjective());
 
 	private CommandHandler() {
 	}
@@ -28,19 +29,20 @@ public class CommandHandler {
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT).requires(hasOperatorPermission());
-			
+
 			subCommands.forEach(subCommandDefinition -> {
 
 				String subCommand = subCommandDefinition.getCommand();
 				var subCommandBuilder = literal(subCommand);
-				
+
 				var args = subCommandDefinition.getArguments();
 				RequiredArgumentBuilder<ServerCommandSource, String> argBuilder = null;
 				for (int i = args.length - 1; i >= 0; i--) {
 					var arg = args[i];
 					var finalArg = i == args.length - 1;
-	
-					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(), string());
+
+					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(),
+							string());
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
 					}

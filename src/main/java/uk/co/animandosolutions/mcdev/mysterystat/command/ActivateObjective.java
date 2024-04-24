@@ -3,6 +3,7 @@ package uk.co.animandosolutions.mcdev.mysterystat.command;
 import static java.lang.String.format;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.setObjectiveDisplay;
 
 import java.util.Optional;
 
@@ -13,18 +14,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 
-record Score(String player, int score) {
-	public Score(String player, int score) {
-		this.player = player;
-		this.score = score;
-	}
-
-	public String toString() {
-		return format("%s: %s", player, score);
-	}
-}
-
-public class ListScores implements CommandDefinition {
+public class ActivateObjective implements CommandDefinition {
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
@@ -39,28 +29,15 @@ public class ListScores implements CommandDefinition {
 		}
 
 		ScoreboardObjective objective = maybeObjective.get();
-		listScores(source, scoreboard, objectiveName, objective);
 
+		activateObjective(source, scoreboard, objectiveName, objective);
+		
 		return 1;
 	}
 
-	private void listScores(ServerCommandSource source, ServerScoreboard scoreboard, String objectiveName,
+	private void activateObjective(ServerCommandSource source, ServerScoreboard scoreboard, String objectiveName,
 			ScoreboardObjective objective) {
-		var list = scoreboard.getScoreboardEntries(objective).stream().map(it -> {
-			var owner = it.owner();
-			var score = it.value();
-			return new Score(owner, score);
-
-		}).sorted(this::scoreDescending).toList();
-		var topThree = list.subList(0, Math.min(3, list.size()));
-
-		sendMessage(source, format("Mystery Stat Leaderboard (%s)", objectiveName));
-		if (list.size() == 0) {
-			sendMessage(source, "<empty list>");
-		}
-		for (int position = topThree.size(); position >= 1; position--) {
-			sendMessage(source, formatListEntry(topThree.get(position - 1), position));
-		}
+		setObjectiveDisplay(scoreboard, objective);
 	}
 
 	private Optional<ScoreboardObjective> getScoreboardObjective(ServerCommandSource source, ServerScoreboard scoreboard,
@@ -72,18 +49,11 @@ public class ListScores implements CommandDefinition {
 		return maybeObjective;
 	}
 
-	private String formatListEntry(final Score entry, final int place) {
-		return format("%d: %s (%s)", place, entry.player(), entry.score());
-	}
-
 	@Override
 	public String getCommand() {
-		return "list";
+		return "activate";
 	}
 
-	private int scoreDescending(Score score1, Score score2) {
-		return score2.score() - score1.score();
-	}
 
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {

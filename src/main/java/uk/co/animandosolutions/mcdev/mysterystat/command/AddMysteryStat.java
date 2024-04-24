@@ -4,7 +4,6 @@ import static java.lang.String.format;
 import static net.minecraft.text.Text.literal;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.createObjective;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
-import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.setObjectiveDisplay;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -32,15 +31,14 @@ public class AddMysteryStat implements CommandDefinition {
 			return 0;
 		}
 
-		addAndDisplayObjective(scoreboard, objectiveName, criterion);
+		addObjective(scoreboard, objectiveName, criterion);
 
 		return 1;
 	}
 
-	private void addAndDisplayObjective(ServerScoreboard scoreboard, String objectiveName,
+	private void addObjective(ServerScoreboard scoreboard, String objectiveName,
 			ScoreboardCriterion criterion) {
-		var objective = createObjective(scoreboard, objectiveName, literal(objectiveName), criterion);
-		setObjectiveDisplay(scoreboard, objective);
+		createObjective(scoreboard, objectiveName, literal(objectiveName), criterion);
 	}
 
 	@Override
