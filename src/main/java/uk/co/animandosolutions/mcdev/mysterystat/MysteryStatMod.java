@@ -10,6 +10,8 @@ import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 public class MysteryStatMod implements ModInitializer {
 
+    private DiscordBot discordBot = DiscordBot.INSTANCE;
+
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -19,7 +21,7 @@ public class MysteryStatMod implements ModInitializer {
         LOGGER.info("Loaded MysteryStat mod");
 
         registerFooCommand();
-        DiscordBot.sendMessage("mod initialized");
+        discordBot.sendMessage("mod initialized");
 
     }
 

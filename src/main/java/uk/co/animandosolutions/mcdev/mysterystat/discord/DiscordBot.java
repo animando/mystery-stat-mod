@@ -1,22 +1,24 @@
 package uk.co.animandosolutions.mcdev.mysterystat.discord;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 
 import static uk.co.animandosolutions.mcdev.mysterystat.config.ConfigWrapper.CONFIG;
+import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 public class DiscordBot {
-    public static final Logger LOGGER = LoggerFactory.getLogger("mystery-stat");
+    public static DiscordBot INSTANCE = new DiscordBot();
 
-    public static boolean checkConfig() {
+    private DiscordBot() {
+
+    }
+
+    private boolean checkConfig() {
         return (!CONFIG.discordBotToken().equals("") && CONFIG.discordChannelId() != -1);
     }
 
-    public static void sendMessage(String messageContent) {
-        if (DiscordBot.checkConfig()) {
+    public void sendMessage(String messageContent) {
+        if (checkConfig()) {
             try {
                 var client = DiscordClient.create(CONFIG.discordBotToken());
 
