@@ -2,19 +2,21 @@ package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
 import static net.minecraft.text.Text.literal;
-import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.slf4j.Logger;
-
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
 record Score(String player, int score) {
 	public Score(String player, int score) {
@@ -28,45 +30,55 @@ record Score(String player, int score) {
 }
 
 public class ListScores implements CommandDefinition {
-	private static final Logger logger = LOGGER;
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
 		var scoreboard = context.getSource().getServer().getScoreboard();
-		String objectiveName = format("mysterystat_%s", context.getArgument("objectiveName", String.class));
+		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME);
+		String objectiveName = fullyQualifiedObjectiveName(objectiveNameArg);
 
-		Optional<ScoreboardObjective> maybeObjective = scoreboard.getObjectives().stream()
-				.filter(it -> it.getName().equals(objectiveName)).findFirst();
+		Optional<ScoreboardObjective> maybeObjective = extracted(source, scoreboard, objectiveName);
 		if (maybeObjective.isEmpty()) {
-			source.sendFeedback(() -> unknown(objectiveName), false);
 			return 0;
 		}
+
 		ScoreboardObjective objective = maybeObjective.get();
+		listScores(source, scoreboard, objectiveName, objective);
+
+		return 1;
+	}
+
+	private void listScores(ServerCommandSource source, ServerScoreboard scoreboard, String objectiveName,
+			ScoreboardObjective objective) {
 		var list = scoreboard.getScoreboardEntries(objective).stream().map(it -> {
 			var owner = it.owner();
 			var score = it.value();
 			return new Score(owner, score);
 
 		}).sorted(this::scoreDescending).toList();
-		logger.info("full list size: " + list.size());
 		var topThree = list.subList(0, Math.min(3, list.size()));
-		logger.info("full list size: " + list.size());
 
-		source.sendFeedback(() -> literal(format("Mystery Stat Leaderboard (%s)", objectiveName)), false);
-		for (int position = topThree.size(); position >= 1; position--) {
-			source.sendFeedback(formatListEntry(topThree.get(position - 1), position), false);
+		sendMessage(source, format("Mystery Stat Leaderboard (%s)", objectiveName));
+		if (list.size() == 0) {
+			sendMessage(source, "<empty list>");
 		}
-
-		return 1;
+		for (int position = topThree.size(); position >= 1; position--) {
+			sendMessage(source, formatListEntry(topThree.get(position - 1), position));
+		}
 	}
 
-	private Supplier<Text> formatListEntry(final Score entry, final int place) {
-		return () -> literal(format("%d: %s (%s)", place, entry.player(), entry.score()));
+	private Optional<ScoreboardObjective> extracted(ServerCommandSource source, ServerScoreboard scoreboard,
+			String objectiveName) {
+		Optional<ScoreboardObjective> maybeObjective = getObjectiveWithName(scoreboard, objectiveName);
+		if (maybeObjective.isEmpty()) {
+			sendMessage(source, format("Unknown objective: %s", objectiveName));
+		}
+		return maybeObjective;
 	}
 
-	private MutableText unknown(String objectiveName) {
-		return literal(format("Unknown objective: %s", objectiveName));
+	private String formatListEntry(final Score entry, final int place) {
+		return format("%d: %s (%s)", place, entry.player(), entry.score());
 	}
 
 	@Override
@@ -76,6 +88,12 @@ public class ListScores implements CommandDefinition {
 
 	private int scoreDescending(Score score1, Score score2) {
 		return score2.score() - score1.score();
+	}
+
+	@Override
+	public CommandDefinition.Argument<?>[] getArguments() {
+		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string()) };
 	}
 
 }

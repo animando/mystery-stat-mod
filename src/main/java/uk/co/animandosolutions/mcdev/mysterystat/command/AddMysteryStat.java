@@ -2,13 +2,15 @@ package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
 import static net.minecraft.text.Text.literal;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.createObjective;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.setObjectiveDisplay;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.minecraft.scoreboard.ScoreboardCriterion;
-import net.minecraft.scoreboard.ScoreboardCriterion.RenderType;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class AddMysteryStat implements CommandDefinition {
@@ -16,20 +18,29 @@ public class AddMysteryStat implements CommandDefinition {
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
-		source.getPlayerNames();
-		source.sendFeedback(() -> literal("Adding mystery stat"), false);
+		sendMessage(source, "Adding mystery stat");
 		var scoreboard = source.getServer().getScoreboard();
 
-		String objectiveName = String.format("mysterystat_%s", context.getArgument("objectiveName", String.class));
+		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME);
+		String objectiveName = fullyQualifiedObjectiveName(objectiveNameArg);
 
-		var displayName = literal(format("%s: %s", "Mystery", objectiveName));
+		String criterionName = getArgument(context, CommandConstants.Arguments.CRITERION);
 
-		var criterion = ScoreboardCriterion.getOrCreateStatCriterion("minecraft.mined:minecraft.dirt")
-				.orElse(ScoreboardCriterion.HEALTH);
-		var objective = scoreboard.addObjective(objectiveName, criterion, displayName, RenderType.INTEGER, true, null);
-		objective.setDisplayAutoUpdate(true);
-		scoreboard.setObjectiveSlot(ScoreboardDisplaySlot.LIST, objective);
+		var criterion = ScoreboardCriterion.getOrCreateStatCriterion(criterionName).orElse(null);
+		if (criterion == null) {
+			sendMessage(source, format("Unknown criterion: %s", criterionName));
+			return 0;
+		}
+
+		addAndDisplayObjective(scoreboard, objectiveName, criterion);
+
 		return 1;
+	}
+
+	private void addAndDisplayObjective(ServerScoreboard scoreboard, String objectiveName,
+			ScoreboardCriterion criterion) {
+		var objective = createObjective(scoreboard, objectiveName, literal(objectiveName), criterion);
+		setObjectiveDisplay(scoreboard, objective);
 	}
 
 	@Override
@@ -39,8 +50,10 @@ public class AddMysteryStat implements CommandDefinition {
 
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
-		return new CommandDefinition.Argument[] {
-				new CommandDefinition.Argument("objectiveName", StringArgumentType.string()) };
+		return new CommandDefinition.Argument<?>[] {
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME,
+						StringArgumentType.string()),
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string()), };
 	}
 
 }

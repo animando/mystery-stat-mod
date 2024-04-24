@@ -1,28 +1,35 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
+import static java.lang.String.format;
+import static java.lang.String.join;
+import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getMysteryObjectives;
+
+import java.util.Collection;
+
 import com.mojang.brigadier.context.CommandContext;
 
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
-import uk.co.animandosolutions.mcdev.mysterystat.utils.Logger;
 
 public class ClearObjectives implements CommandDefinition {
-	
+
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
 		var scoreboard = source.getServer().getScoreboard();
-		var objectives = scoreboard.getObjectives();
-		for (var it = objectives.iterator(); it.hasNext(); ) {
-			var element = it.next();
-			if (!element.getName().startsWith("mysterystat_")) {
-				it.remove();
-			}
-			
-		}
-		Logger.LOGGER.info(String.format("removing objectives %s", String.join(", ", objectives.stream().map(s -> s.getName()).toList())));
+		var objectives = getMysteryObjectives(scoreboard);
+		String objectiveListAsString = join(", ", objectives.stream().map(s -> s.getName()).toList());
+
+		sendMessage(source, format("removing objectives %s", objectiveListAsString));
+
+		removeObjectives(scoreboard, objectives);
 		
-		objectives.forEach(scoreboard::removeObjective);
 		return 1;
+	}
+
+	private void removeObjectives(ServerScoreboard scoreboard, Collection<ScoreboardObjective> objectives) {
+		objectives.forEach(scoreboard::removeObjective);
 	}
 
 	@Override
