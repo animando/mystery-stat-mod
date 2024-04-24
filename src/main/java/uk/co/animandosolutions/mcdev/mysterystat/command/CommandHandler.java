@@ -1,5 +1,6 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
+import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -7,8 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
+
+record Argument(String name, boolean optional) {
+}
 
 public class CommandHandler {
 
@@ -21,14 +27,36 @@ public class CommandHandler {
 
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			var commandBuilder = literal("mysterystat").requires(hasOperatorPermission());
+			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT).requires(hasOperatorPermission());
+			
+			subCommands.forEach(subCommandDefinition -> {
 
-			subCommands.forEach(it -> {
-				var subCommandBuilder = literal(it.getCommand());
-				Arrays.asList(it.getArguments()).forEach(arg -> {
-					subCommandBuilder.then(argument(arg.name(), arg.argumentType()));
-				});
-				subCommandBuilder.executes(it::execute);
+				String subCommand = subCommandDefinition.getCommand();
+				var subCommandBuilder = literal(subCommand);
+				
+				var args = subCommandDefinition.getArguments();
+				RequiredArgumentBuilder<ServerCommandSource, String> argBuilder = null;
+				for (int i = args.length - 1; i >= 0; i--) {
+					var arg = args[i];
+					var finalArg = i == args.length - 1;
+	
+					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(), string());
+					if (finalArg || args[i + 1].optional()) {
+						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
+					}
+					if (argBuilder != null) {
+						argBuilder = localArgBuilder.then(argBuilder);
+					} else {
+						argBuilder = localArgBuilder;
+					}
+				}
+				if (argBuilder != null) {
+					subCommandBuilder.then(argBuilder);
+				}
+				if (args.length == 0 || args[0].optional()) {
+					subCommandBuilder.executes(subCommandDefinition::execute);
+				}
+
 				commandBuilder.then(subCommandBuilder);
 			});
 

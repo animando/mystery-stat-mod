@@ -22,4 +22,4 @@ public class MysteryStatMod implements ModInitializer {
         CommandHandler.INSTANCE.registerCommands();
 //        discordBot.sendMessage("mod initialized");
     }
-}
+} 

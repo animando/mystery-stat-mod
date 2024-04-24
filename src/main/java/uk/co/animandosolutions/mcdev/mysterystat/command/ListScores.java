@@ -1,12 +1,10 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
-import static net.minecraft.text.Text.literal;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -14,9 +12,6 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
 record Score(String player, int score) {
 	public Score(String player, int score) {
@@ -35,7 +30,7 @@ public class ListScores implements CommandDefinition {
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
 		var scoreboard = context.getSource().getServer().getScoreboard();
-		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME);
+		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME).orElseThrow();
 		String objectiveName = fullyQualifiedObjectiveName(objectiveNameArg);
 
 		Optional<ScoreboardObjective> maybeObjective = extracted(source, scoreboard, objectiveName);
@@ -93,7 +88,7 @@ public class ListScores implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string()) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false) };
 	}
 
 }

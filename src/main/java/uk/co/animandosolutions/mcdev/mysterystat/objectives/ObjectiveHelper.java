@@ -3,7 +3,6 @@ package uk.co.animandosolutions.mcdev.mysterystat.objectives;
 import static java.lang.String.format;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 
 import net.minecraft.scoreboard.ScoreboardCriterion;

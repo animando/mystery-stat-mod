@@ -1,6 +1,8 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
-import static net.minecraft.text.Text.literal;
+import static uk.co.animandosolutions.mcdev.mysterystat.command.CommandHelper.getOptionalArgument;
+
+import java.util.Optional;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,11 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
 
 public interface CommandDefinition {
-	public record Argument<T>(String name, ArgumentType<T> argumentType) {
-		public Argument(String name, ArgumentType<T> argumentType) {
-			this.name = name;
-			this.argumentType = argumentType;
-		}
+	public record Argument<T>(String name, ArgumentType<T> argumentType, boolean optional) {
 	}
 
 	String getCommand();
@@ -24,14 +22,22 @@ public interface CommandDefinition {
 	}
 
 	default void sendMessage(ServerCommandSource source, String message) {
-		source.sendFeedback(() -> literal(message), false);
+		CommandHelper.sendFeedback(source, message);
 	}
 
-	default String getArgument(CommandContext<ServerCommandSource> context, String argumentName) {
+	default Optional<String> getArgument(CommandContext<ServerCommandSource> context, String argumentName) {
 		return this.getArgument(context, argumentName, String.class);
 	}
+	
+	default String getArgument(CommandContext<ServerCommandSource> context, String argumentName, String fallbackValue) {
+		return this.getArgument(context, argumentName, String.class, fallbackValue);
+	}
 
-	default <V> V getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz) {
-		return context.getArgument(argumentName, clazz);
+	default <V> V getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz, V fallbackValue) {
+		return this.getArgument(context, argumentName, clazz).orElse(fallbackValue);
+	}
+	
+	default <V> Optional<V> getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz) {
+		return getOptionalArgument(context, argumentName, clazz);
 	}
 }

@@ -21,10 +21,10 @@ public class AddMysteryStat implements CommandDefinition {
 		sendMessage(source, "Adding mystery stat");
 		var scoreboard = source.getServer().getScoreboard();
 
-		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME);
+		String objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME).orElseThrow();
 		String objectiveName = fullyQualifiedObjectiveName(objectiveNameArg);
 
-		String criterionName = getArgument(context, CommandConstants.Arguments.CRITERION);
+		String criterionName = getArgument(context, CommandConstants.Arguments.CRITERION).orElseThrow();
 
 		var criterion = ScoreboardCriterion.getOrCreateStatCriterion(criterionName).orElse(null);
 		if (criterion == null) {
@@ -51,9 +51,10 @@ public class AddMysteryStat implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
-				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME,
-						StringArgumentType.string()),
-				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string()), };
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
+						false),
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string(),
+						false), };
 	}
 
 }
