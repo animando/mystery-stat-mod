@@ -1,6 +1,7 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
+import static java.util.Optional.of;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
 
 public class ListScores implements CommandDefinition {
 
@@ -24,13 +26,13 @@ public class ListScores implements CommandDefinition {
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
 		var scoreboard = context.getSource().getServer().getScoreboard();
-		Optional<String> objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME).map(ObjectiveHelper::fullyQualifiedObjectiveName);
+		Optional<String> objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME)
+				.map(ObjectiveHelper::fullyQualifiedObjectiveName);
 
-		Optional<ScoreboardObjective> maybeObjective =
-				objectiveNameArg.isPresent() ? 
-						getScoreboardObjective(source, scoreboard, objectiveNameArg.get()) :
-							Optional.of(scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
-		
+		Optional<ScoreboardObjective> maybeObjective = objectiveNameArg.isPresent()
+				? getScoreboardObjective(source, scoreboard, objectiveNameArg.get())
+				: Optional.of(scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
+
 		if (maybeObjective.isEmpty()) {
 			return 0;
 		}
@@ -73,8 +75,9 @@ public class ListScores implements CommandDefinition {
 
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
-		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), true, PERMISSION_LIST_ANY) };
+		return new CommandDefinition.Argument<?>[] {
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
+						true, PERMISSION_LIST_ANY, of(MysteryObjectiveSuggestionProvider.INSTANCE)) };
 	}
 
 	@Override

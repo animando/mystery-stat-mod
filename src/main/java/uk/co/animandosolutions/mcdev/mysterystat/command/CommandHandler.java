@@ -6,7 +6,6 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
@@ -14,8 +13,6 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 
-record Argument(String name, boolean optional) {
-}
 
 public class CommandHandler {
 
@@ -45,7 +42,11 @@ public class CommandHandler {
 					var finalArg = i == args.length - 1;
 
 					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(),
-							string()).requires(Permissions.require(arg.permission()));
+							string());
+					if (arg.suggestionProvider().isPresent()) {
+						localArgBuilder.suggests(arg.suggestionProvider().get());
+					};
+					localArgBuilder.requires(Permissions.require(arg.permission()));
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
 					}

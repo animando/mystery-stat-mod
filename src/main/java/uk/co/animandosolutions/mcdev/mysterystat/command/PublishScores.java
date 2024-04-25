@@ -1,6 +1,7 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
+import static java.util.Optional.of;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 
@@ -15,6 +16,7 @@ import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
 
 public class PublishScores implements CommandDefinition {
 	DiscordBot discord = DiscordBot.INSTANCE;
@@ -71,8 +73,9 @@ public class PublishScores implements CommandDefinition {
 
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
-		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, PERMISSION) };
+		return new CommandDefinition.Argument<?>[] {
+				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
+						false, PERMISSION, of(MysteryObjectiveSuggestionProvider.INSTANCE)) };
 	}
 
 	@Override

@@ -1,16 +1,21 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 import static net.minecraft.text.Text.literal;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.createObjective;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 
+import java.util.Optional;
+
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
+import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Identifier;
 
 public class AddMysteryStat implements CommandDefinition {
 	static final String PERMISSION = "mysterystat.add";
@@ -50,9 +55,9 @@ public class AddMysteryStat implements CommandDefinition {
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
-						false, PERMISSION),
+						false, PERMISSION, ofNullable(null)),
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string(),
-						false, PERMISSION), };
+						false, PERMISSION, ofNullable(null)), };
 	}
 
 	@Override

@@ -6,11 +6,12 @@ import java.util.Optional;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import net.minecraft.server.command.ServerCommandSource;
 
 public interface CommandDefinition {
-	public record Argument<T>(String name, ArgumentType<T> argumentType, boolean optional, String permission) {
+	public record Argument<T>(String name, ArgumentType<T> argumentType, boolean optional, String permission, Optional<SuggestionProvider<ServerCommandSource>> suggestionProvider) {
 	}
 
 	String getCommand();
@@ -39,6 +40,10 @@ public interface CommandDefinition {
 	
 	default <V> Optional<V> getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz) {
 		return getOptionalArgument(context, argumentName, clazz);
+	}
+	
+	default SuggestionProvider<ServerCommandSource> suggestionProvider() {
+		return null;
 	}
 	
 	String getPermission();

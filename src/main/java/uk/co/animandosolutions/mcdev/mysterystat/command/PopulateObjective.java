@@ -1,6 +1,8 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
@@ -20,6 +22,8 @@ import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.NonMysteryObjectiveSuggestionProvider;
 
 public class PopulateObjective implements CommandDefinition {
 	private Logger logger = LOGGER;
@@ -87,9 +91,9 @@ public class PopulateObjective implements CommandDefinition {
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
-						false, PERMISSION),
+						false, PERMISSION, of(MysteryObjectiveSuggestionProvider.INSTANCE)),
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.SOURCE_OBJECTIVE,
-						StringArgumentType.string(), false, PERMISSION) };
+						StringArgumentType.string(), false, PERMISSION, of(NonMysteryObjectiveSuggestionProvider.INSTANCE)) };
 	}
 	
 	@Override

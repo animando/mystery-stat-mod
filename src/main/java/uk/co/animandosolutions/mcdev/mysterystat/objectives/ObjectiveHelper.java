@@ -19,7 +19,8 @@ public class ObjectiveHelper {
 	}
 
 	public static List<Score> getTopThree(Scoreboard scoreboard, ScoreboardObjective objective) {
-		List<Score> list = getAllObjectiveScores(scoreboard, objective).stream().sorted(ObjectiveHelper::scoreDescending).toList();
+		List<Score> list = getAllObjectiveScores(scoreboard, objective).stream()
+				.sorted(ObjectiveHelper::scoreDescending).toList();
 		List<Score> topThree = list.subList(0, Math.min(3, list.size()));
 		return topThree;
 	}
@@ -50,8 +51,32 @@ public class ObjectiveHelper {
 		return maybeObjective;
 	}
 
+	public static List<ScoreboardObjective> getAllMysteryStatObjectives(ServerScoreboard scoreboard) {
+		List<ScoreboardObjective> objectives = scoreboard.getObjectives().stream()
+				.filter(it -> it.getName().startsWith(ObjectiveConstants.OBJECTIVE_PREFIX)).toList();
+		return objectives;
+	}
+
+	public static List<ScoreboardObjective> getAllNonMysteryStatObjectives(ServerScoreboard scoreboard) {
+		List<ScoreboardObjective> objectives = scoreboard.getObjectives().stream()
+				.filter(it -> !it.getName().startsWith(ObjectiveConstants.OBJECTIVE_PREFIX)).toList();
+		return objectives;
+	}
+	
+	public static List<String> getAllNonMysteryStatObjectiveIdentifiers(ServerScoreboard scoreboard) {
+		return getAllNonMysteryStatObjectives(scoreboard).stream().map(it -> it.getName()).toList();
+	}
+	
+	public static List<String> getAllMysteryStatObjectiveIdentifiers(ServerScoreboard scoreboard) {
+		return getAllMysteryStatObjectives(scoreboard).stream().map(it -> it.getName()).map(ObjectiveHelper::stripPrefix).toList();
+	}
+
 	public static String fullyQualifiedObjectiveName(String objectiveNameArg) {
 		return format("%s_%s", ObjectiveConstants.OBJECTIVE_PREFIX, objectiveNameArg);
+	}
+
+	public static String stripPrefix(String objectiveNameArg) {
+		return objectiveNameArg.replace(format("%s_", ObjectiveConstants.OBJECTIVE_PREFIX), "");
 	}
 
 	public static ScoreboardObjective createObjective(ServerScoreboard scoreboard, String objectiveName,
