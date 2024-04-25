@@ -17,6 +17,9 @@ import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
 public class ListScores implements CommandDefinition {
 
+	static final String PERMISSION_LIST_ANY = "mysterystat.list.any";
+	static final String PERMISSION_LIST_CURRENT = "mysterystat.list.current";
+
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
@@ -71,12 +74,12 @@ public class ListScores implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), true, 4) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), true, PERMISSION_LIST_ANY) };
 	}
 
 	@Override
-	public int getPermissionLevel() {
-		return 0;
+	public String getPermission() {
+		return PERMISSION_LIST_CURRENT;
 	}
 
 }

@@ -24,6 +24,7 @@ import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 public class PopulateObjective implements CommandDefinition {
 	private Logger logger = LOGGER;
 	DiscordBot discord = DiscordBot.INSTANCE;
+	static final String PERMISSION = "mysterystat.populate";
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
@@ -77,10 +78,6 @@ public class PopulateObjective implements CommandDefinition {
 		return maybeObjective;
 	}
 
-	private String formatListEntry(final ObjectiveHelper.Score entry, final int place) {
-		return format("%d: %s (%s)", place, entry.player(), entry.score());
-	}
-
 	@Override
 	public String getCommand() {
 		return "populate";
@@ -90,9 +87,14 @@ public class PopulateObjective implements CommandDefinition {
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
-						false, 4),
+						false, PERMISSION),
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.SOURCE_OBJECTIVE,
-						StringArgumentType.string(), false, 4) };
+						StringArgumentType.string(), false, PERMISSION) };
+	}
+	
+	@Override
+	public String getPermission() {
+		return PERMISSION;
 	}
 
 }

@@ -16,6 +16,8 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class ActivateObjective implements CommandDefinition {
 
+	static final String PERMISSION = "mysterystat.activate";
+
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
@@ -31,7 +33,7 @@ public class ActivateObjective implements CommandDefinition {
 		ScoreboardObjective objective = maybeObjective.get();
 
 		activateObjective(source, scoreboard, objectiveName, objective);
-		
+
 		return 1;
 	}
 
@@ -40,8 +42,8 @@ public class ActivateObjective implements CommandDefinition {
 		setObjectiveDisplay(scoreboard, objective);
 	}
 
-	private Optional<ScoreboardObjective> getScoreboardObjective(ServerCommandSource source, ServerScoreboard scoreboard,
-			String objectiveName) {
+	private Optional<ScoreboardObjective> getScoreboardObjective(ServerCommandSource source,
+			ServerScoreboard scoreboard, String objectiveName) {
 		Optional<ScoreboardObjective> maybeObjective = getObjectiveWithName(scoreboard, objectiveName);
 		if (maybeObjective.isEmpty()) {
 			sendMessage(source, format("Unknown objective: %s", objectiveName));
@@ -54,11 +56,15 @@ public class ActivateObjective implements CommandDefinition {
 		return "activate";
 	}
 
-
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, 4) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, PERMISSION) };
+	}
+
+	@Override
+	public String getPermission() {
+		return PERMISSION;
 	}
 
 }

@@ -13,6 +13,7 @@ import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class AddMysteryStat implements CommandDefinition {
+	static final String PERMISSION = "mysterystat.add";
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
@@ -36,8 +37,7 @@ public class AddMysteryStat implements CommandDefinition {
 		return 1;
 	}
 
-	private void addObjective(ServerScoreboard scoreboard, String objectiveName,
-			ScoreboardCriterion criterion) {
+	private void addObjective(ServerScoreboard scoreboard, String objectiveName, ScoreboardCriterion criterion) {
 		createObjective(scoreboard, objectiveName, literal(objectiveName), criterion);
 	}
 
@@ -50,9 +50,13 @@ public class AddMysteryStat implements CommandDefinition {
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] {
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(),
-						false, 4),
+						false, PERMISSION),
 				new CommandDefinition.Argument<>(CommandConstants.Arguments.CRITERION, StringArgumentType.string(),
-						false, 4), };
+						false, PERMISSION), };
 	}
 
+	@Override
+	public String getPermission() {
+		return PERMISSION;
+	}
 }

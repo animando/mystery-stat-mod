@@ -15,6 +15,8 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class ClearObjective implements CommandDefinition {
 
+	static final String PERMISSION = "mysterystat.clear";
+
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
@@ -57,7 +59,12 @@ public class ClearObjective implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, 4), };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, PERMISSION), };
+	}
+
+	@Override
+	public String getPermission() {
+		return PERMISSION;
 	}
 
 }

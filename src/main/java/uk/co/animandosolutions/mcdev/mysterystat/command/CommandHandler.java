@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -28,13 +29,14 @@ public class CommandHandler {
 
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT);
+			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT)
+					.requires(Permissions.require(CommandConstants.Commands.MYSTERYSTAT, 0));
 
 			subCommands.forEach(subCommandDefinition -> {
 
 				String subCommand = subCommandDefinition.getCommand();
 				var subCommandBuilder = literal(subCommand)
-						.requires(source -> source.hasPermissionLevel(subCommandDefinition.getPermissionLevel()));
+						.requires(Permissions.require(subCommandDefinition.getPermission()));
 
 				var args = subCommandDefinition.getArguments();
 				RequiredArgumentBuilder<ServerCommandSource, String> argBuilder = null;
@@ -43,7 +45,7 @@ public class CommandHandler {
 					var finalArg = i == args.length - 1;
 
 					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(),
-							string()).requires(source -> source.hasPermissionLevel(arg.permissionLevel()));
+							string()).requires(Permissions.require(arg.permission()));
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
 					}
@@ -66,9 +68,4 @@ public class CommandHandler {
 			dispatcher.register(commandBuilder);
 		});
 	}
-
-	private Predicate<ServerCommandSource> hasOperatorPermission() {
-		return source -> source.hasPermissionLevel(4);
-	}
-
 }

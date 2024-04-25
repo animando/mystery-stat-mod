@@ -19,6 +19,8 @@ import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 public class PublishScores implements CommandDefinition {
 	DiscordBot discord = DiscordBot.INSTANCE;
 
+	static final String PERMISSION = "mysterystat.publish";
+
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource source = context.getSource();
@@ -70,7 +72,12 @@ public class PublishScores implements CommandDefinition {
 	@Override
 	public CommandDefinition.Argument<?>[] getArguments() {
 		return new CommandDefinition.Argument<?>[] { new CommandDefinition.Argument<>(
-				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, 4) };
+				CommandConstants.Arguments.OBJECTIVE_NAME, StringArgumentType.string(), false, PERMISSION) };
+	}
+
+	@Override
+	public String getPermission() {
+		return PERMISSION;
 	}
 
 }

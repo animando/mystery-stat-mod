@@ -45,10 +45,16 @@ dependencies {
 
     modImplementation "io.wispforest:owo-lib:${project.owo_version}"
 	// annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
-    include "io.wispforest:owo-sentinel:${project.owo_version}"
+    include           "io.wispforest:owo-sentinel:${project.owo_version}"
 
 	modImplementation "com.discord4j:discord4j-core:3.2.6"
-	shadow "com.discord4j:discord4j-core:3.2.6"
+	shadow             "com.discord4j:discord4j-core:3.2.6"
+
+	modImplementation "me.lucko:fabric-permissions-api:0.3.1"
+	shadow            "me.lucko:fabric-permissions-api:0.3.1"
+	
+	modImplementation "net.luckperms:api:5.4"
+    include           "net.luckperms:api:5.4"
 }
 
 shadowJar {
@@ -65,7 +71,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 19
 }
 
 java {
@@ -73,9 +79,12 @@ java {
 	// if it is present.
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(19)
+    }
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_19
+	targetCompatibility = JavaVersion.VERSION_19
 }
 
 jar {
@@ -88,6 +97,7 @@ jar {
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
 			from components.java
 		}
 	}
