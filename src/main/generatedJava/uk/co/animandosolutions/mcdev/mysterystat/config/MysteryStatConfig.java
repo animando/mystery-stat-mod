@@ -10,7 +10,6 @@ public class MysteryStatConfig extends ConfigWrapper<uk.co.animandosolutions.mcd
     public final Keys keys = new Keys();
 
     private final Option<java.lang.Long> discordChannelId = this.optionForKey(this.keys.discordChannelId);
-    private final Option<java.lang.Boolean> publishResults = this.optionForKey(this.keys.publishResults);
     private final Option<java.lang.String> discordBotToken = this.optionForKey(this.keys.discordBotToken);
 
     private MysteryStatConfig() {
@@ -39,14 +38,6 @@ public class MysteryStatConfig extends ConfigWrapper<uk.co.animandosolutions.mcd
 
     public void discordChannelId(long value) {
         discordChannelId.set(value);
-    }
-
-    public boolean publishResults() {
-        return publishResults.value();
-    }
-
-    public void publishResults(boolean value) {
-        publishResults.set(value);
     }
 
     public java.lang.String discordBotToken() {

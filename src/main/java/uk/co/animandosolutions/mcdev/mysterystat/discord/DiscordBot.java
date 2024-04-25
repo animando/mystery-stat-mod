@@ -13,7 +13,7 @@ public class DiscordBot {
 
     }
 
-    private boolean checkConfig() {
+    public boolean checkConfig() {
         return (!CONFIG.discordBotToken().equals("") && CONFIG.discordChannelId() != -1);
     }
 

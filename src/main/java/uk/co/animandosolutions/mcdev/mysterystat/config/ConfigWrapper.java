@@ -8,6 +8,10 @@ public class ConfigWrapper {
     private ConfigWrapper() {
 
     }
+    
+    public void checkConfig() {
+    	
+    }
 
     public long discordChannelId() {
         return _config.discordChannelId();
