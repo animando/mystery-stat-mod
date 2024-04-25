@@ -21,7 +21,7 @@ public class CommandHandler {
 	public static final CommandHandler INSTANCE = new CommandHandler();
 
 	List<CommandDefinition> subCommands = Arrays.asList(new AddMysteryStat(), new ListScores(), new ClearObjective(),
-			new ActivateObjective(), new PublishScores());
+			new ActivateObjective(), new PublishScores(), new PopulateObjective());
 
 	private CommandHandler() {
 	}

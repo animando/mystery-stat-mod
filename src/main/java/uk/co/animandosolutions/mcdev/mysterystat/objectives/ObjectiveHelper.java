@@ -19,13 +19,17 @@ public class ObjectiveHelper {
 	}
 
 	public static List<Score> getTopThree(Scoreboard scoreboard, ScoreboardObjective objective) {
-		List<Score> list = scoreboard.getScoreboardEntries(objective).stream().map(it -> {
+		List<Score> list = getAllObjectiveScores(scoreboard, objective).stream().sorted(ObjectiveHelper::scoreDescending).toList();
+		List<Score> topThree = list.subList(0, Math.min(3, list.size()));
+		return topThree;
+	}
+
+	public static List<Score> getAllObjectiveScores(Scoreboard scoreboard, ScoreboardObjective objective) {
+		return scoreboard.getScoreboardEntries(objective).stream().map(it -> {
 			var owner = it.owner();
 			var score = it.value();
 			return new Score(owner, score);
-		}).sorted(ObjectiveHelper::scoreDescending).toList();
-		List<Score> topThree = list.subList(0, Math.min(3, list.size()));
-		return topThree;
+		}).toList();
 	}
 
 	public static record Score(String player, int score) {
