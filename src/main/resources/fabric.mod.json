@@ -5,13 +5,12 @@
 	"name": "Mystery Stat",
 	"description": "Implements a mystery stat game",
 	"authors": [
-		"Me!"
+		"Graham King"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/animando/mystery-stat-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/mystery-stat/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -29,7 +28,9 @@
 		"fabric-api": "*",
 		"fabric-permissions-api-v0": "*" 
 	},
-	"suggests": {
-		"another-mod": "*"
-	}
+	  "custom": {
+	    "mc-publish": {
+	      "modrinth": "animando"
+	    }
+	  }
 }

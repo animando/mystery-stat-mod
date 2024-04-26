@@ -5,12 +5,20 @@
 
 name: build
 on: [pull_request, push]
+env:                                              
+  MINECRAFT_VERSION: 1.20.4                        
+  VERSION: 1.0.2+1.20.4
+  RELEASE_NAME: Mystery Stat Mod 1.0.2 for Minecraft 1.20.4
+  MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}           
+
 
 jobs:
   build:
+    permissions:
+      contents: write
     strategy:
       matrix:
-        # Use these Java versions
         java: [
           17,    # Current Java LTS & minimum supported by Minecraft
           21,    # Current Java LTS
@@ -26,13 +34,27 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'microsoft'
+
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
+
       - name: build
         run: ./gradlew build
-      - name: capture build artifacts
+
+      - name: Publish (CurseForge/Modrinth/GitHub)
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
-        uses: actions/upload-artifact@v4
+        uses: Kir-Antipov/mc-publish@v3.2
         with:
-          name: Artifacts
-          path: build/libs/
+          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+          modrinth-featured: true
+          
+          github-token: "${{env.GITHUB_TOKEN}}"
+
+          name: "${{env.RELEASE_NAME}}"                             
+          version: "${{env.VERSION}}"
+          version-type: release
+          #changelog-file: CHANGELOG.md                                      #The file in which the changes of your new update are specified (the path starts at your project root)
+
+          loaders: fabric
+          game-versions: "${{env.MINECRAFT_VERSION}}"
+          java: "${{env.JAVA_VERSION}}"
