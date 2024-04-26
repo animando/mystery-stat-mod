@@ -29,11 +29,11 @@ public interface CommandDefinition {
 	default Optional<String> getArgument(CommandContext<ServerCommandSource> context, String argumentName) {
 		return this.getArgument(context, argumentName, String.class);
 	}
-	
-	default String getArgument(CommandContext<ServerCommandSource> context, String argumentName, String fallbackValue) {
-		return this.getArgument(context, argumentName, String.class, fallbackValue);
-	}
 
+	default String getArgument(CommandContext<ServerCommandSource> context, String argumentName, String fallbackValue) {
+		return this.getArgument(context, argumentName, String.class).orElse(fallbackValue);
+	}
+	
 	default <V> V getArgument(CommandContext<ServerCommandSource> context, String argumentName, final Class<V> clazz, V fallbackValue) {
 		return this.getArgument(context, argumentName, clazz).orElse(fallbackValue);
 	}

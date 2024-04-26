@@ -14,8 +14,8 @@ import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
-import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
 public class ListScores implements CommandDefinition {
 
@@ -29,11 +29,13 @@ public class ListScores implements CommandDefinition {
 		Optional<String> objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME)
 				.map(ObjectiveHelper::fullyQualifiedObjectiveName);
 
+		Optional<ScoreboardObjective> maybeScoreboardObjective = Optional.of(scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
 		Optional<ScoreboardObjective> maybeObjective = objectiveNameArg.isPresent()
 				? getScoreboardObjective(source, scoreboard, objectiveNameArg.get())
-				: Optional.of(scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
+				: maybeScoreboardObjective;
 
 		if (maybeObjective.isEmpty()) {
+			sendMessage(source, "No current objective");
 			return 0;
 		}
 

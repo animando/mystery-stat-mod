@@ -2,7 +2,6 @@ package uk.co.animandosolutions.mcdev.mysterystat.command;
 
 import static java.lang.String.format;
 import static java.util.Optional.of;
-import static java.util.Optional.ofNullable;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.fullyQualifiedObjectiveName;
 import static uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper.getObjectiveWithName;
 import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
@@ -21,9 +20,9 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
-import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.NonMysteryObjectiveSuggestionProvider;
+import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
 public class PopulateObjective implements CommandDefinition {
 	private Logger logger = LOGGER;

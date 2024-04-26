@@ -1,6 +1,5 @@
 package uk.co.animandosolutions.mcdev.mysterystat.command;
 
-import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -12,7 +11,6 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
-
 
 public class CommandHandler {
 
@@ -36,16 +34,16 @@ public class CommandHandler {
 						.requires(Permissions.require(subCommandDefinition.getPermission()));
 
 				var args = subCommandDefinition.getArguments();
-				RequiredArgumentBuilder<ServerCommandSource, String> argBuilder = null;
+				RequiredArgumentBuilder<ServerCommandSource, ?> argBuilder = null;
 				for (int i = args.length - 1; i >= 0; i--) {
 					var arg = args[i];
 					var finalArg = i == args.length - 1;
 
-					RequiredArgumentBuilder<ServerCommandSource, String> localArgBuilder = argument(arg.name(),
-							string());
+					RequiredArgumentBuilder<ServerCommandSource, ?> localArgBuilder = argument(arg.name(),
+							arg.argumentType());
 					if (arg.suggestionProvider().isPresent()) {
 						localArgBuilder.suggests(arg.suggestionProvider().get());
-					};
+					}
 					localArgBuilder.requires(Permissions.require(arg.permission()));
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
