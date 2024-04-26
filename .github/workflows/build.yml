@@ -43,7 +43,7 @@ jobs:
 
       - name: Publish (CurseForge/Modrinth/GitHub)
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           modrinth-token: "${{env.MODRINTH_TOKEN}}"
           modrinth-featured: true
