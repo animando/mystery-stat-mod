@@ -14,22 +14,19 @@ public class DiscordBot {
     }
 
     public boolean checkConfig() {
-        return (!CONFIG.discordBotToken().equals("") && CONFIG.discordChannelId() != -1);
+        return !(CONFIG.discordBotToken().equals("") || CONFIG.discordChannelId() == -1);
     }
 
     public void sendMessage(String messageContent) {
-        if (checkConfig()) {
-            try {
-                var client = DiscordClient.create(CONFIG.discordBotToken());
+        try {
+            var client = DiscordClient.create(CONFIG.discordBotToken());
 
-                // var gateway = client.login().block();
-                var channel = client.getChannelById(Snowflake.of(CONFIG.discordChannelId()));
-    
-                var message = channel.createMessage(messageContent);
-                message.block();
-            } catch (Exception e) {
-                LOGGER.error("Error sending discord message", e);
-            }
+            var channel = client.getChannelById(Snowflake.of(CONFIG.discordChannelId()));
+
+            var message = channel.createMessage(messageContent);
+            message.block();
+        } catch (Exception e) {
+            LOGGER.error("Error sending discord message", e);
         }
     }
 }
