@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 on:
     release:
@@ -12,7 +12,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}           
 
 jobs:
-    build:
+    release:
         runs-on: ubuntu-latest
 
         steps:
@@ -27,7 +27,6 @@ jobs:
               run: ./gradlew build
 
             - name: Publish (Modrinth/GitHub)
-              if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
               uses: Kir-Antipov/mc-publish@v3.3.0
               with:
                 modrinth-token: "${{env.MODRINTH_TOKEN}}"
