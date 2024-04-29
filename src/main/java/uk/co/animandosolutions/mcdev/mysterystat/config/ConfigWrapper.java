@@ -9,7 +9,6 @@ import uk.co.animandosolutions.mcdev.mysterystat.utils.Logger;
 
 public class ConfigWrapper {
 
-
 	public static final ConfigWrapper CONFIG = new ConfigWrapper();
 	private Config konfConfig;
 
@@ -19,7 +18,13 @@ public class ConfigWrapper {
 		};
 		c.addSpec(DiscordSpec.spec);
 		var defaultSource = TomlProvider.get().resource("mysterystat.toml", true);
-		var configFileSource = TomlProvider.get().file(FabricLoader.getInstance().getConfigDir().resolve("mysterystat.toml").toFile(), false);
+		var configFile = FabricLoader.getInstance().getConfigDir().resolve("mysterystat.toml").toFile();
+		try {
+			configFile.createNewFile();
+		} catch (Exception e) {
+			Logger.LOGGER.error("Error creating mysterystat.toml", e);
+		}
+		var configFileSource = TomlProvider.get().file(configFile, false);
 		this.konfConfig = c.withSource(defaultSource).withSource(configFileSource);
 	}
 
