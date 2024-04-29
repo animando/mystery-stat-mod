@@ -25,13 +25,13 @@ public class CommandHandler {
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT)
-					.requires(Permissions.require(CommandConstants.Commands.MYSTERYSTAT, 0));
+					.requires(Permissions.require(CommandConstants.Commands.MYSTERYSTAT, 4));
 
 			subCommands.forEach(subCommandDefinition -> {
 
 				String subCommand = subCommandDefinition.getCommand();
 				var subCommandBuilder = literal(subCommand)
-						.requires(Permissions.require(subCommandDefinition.getPermission()));
+						.requires(Permissions.require(subCommandDefinition.getPermission(), 4));
 
 				var args = subCommandDefinition.getArguments();
 				RequiredArgumentBuilder<ServerCommandSource, ?> argBuilder = null;
@@ -44,7 +44,7 @@ public class CommandHandler {
 					if (arg.suggestionProvider().isPresent()) {
 						localArgBuilder.suggests(arg.suggestionProvider().get());
 					}
-					localArgBuilder.requires(Permissions.require(arg.permission()));
+					localArgBuilder.requires(Permissions.require(arg.permission(), 4));
 					if (finalArg || args[i + 1].optional()) {
 						localArgBuilder = localArgBuilder.executes(subCommandDefinition::execute);
 					}
