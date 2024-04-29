@@ -26,11 +26,11 @@
 		"minecraft": "~1.20.4",
 		"java": ">=17",
 		"fabric-api": "*",
-		"fabric-permissions-api-v0": "*" 
+		"fabric-permissions-api-v0": "*"
 	},
-	  "custom": {
-	    "mc-publish": {
-	      "modrinth": "h55IKPRF"
-	    }
-	  }
+    "custom": {
+      "mc-publish": {
+        "modrinth": "h55IKPRF"
+      }
+    }
 }

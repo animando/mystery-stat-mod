@@ -22,6 +22,5 @@ public class MysteryStatMod implements ModInitializer {
         LOGGER.info("Loaded MysteryStat mod");
 
         CommandHandler.INSTANCE.registerCommands();
-//        discordBot.sendMessage("mod initialized");
     }
 } 
