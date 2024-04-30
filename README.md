@@ -18,14 +18,12 @@ https://discord.gg/Tuywdy59KX
 
 - [fabric-api](https://modrinth.com/mod/fabric-api)
 - [fabric-permissions-api](https://modrinth.com/mod/fabric-permissions-api)
-- [owo-lib](https://modrinth.com/mod/owo-lib)
-- [luckperms](https://modrinth.com/mod/luckperms)  _(optional)_
 
 ## Installation
 
 - Add the mod jar and the dependencies
 - Start the server
-- Edit config/mysterystat.json5 with your discord bot's authentication token and channel id
+- Edit config/mysterystat.toml with your discord bot's authentication token and channel id
 - Restart the server
 
 ## Commands

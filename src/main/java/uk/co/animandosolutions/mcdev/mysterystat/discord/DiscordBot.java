@@ -50,13 +50,13 @@ public class DiscordBot {
     public void sendMessage(String messageContent) {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
-            String url = String.format(ENDPOINT, CONFIG.discordChannelId());
-            String body = new ObjectMapper().writeValueAsString(new Body(messageContent));
+            String url = format(ENDPOINT, CONFIG.discordChannelId());
+            ;
             var request = HttpRequest.newBuilder(new URI(url))
                     .header(Headers.AUTHORIZATION, String.format(AUTHORIZATION_PATTERN, CONFIG.discordBotToken()))
                     .header(Headers.CONTENT_TYPE, APPLICATION_JSON)
                     .header(Headers.USER_AGENT, format(USER_AGENT_PATTERN, USER_AGENT_URL, API_VERSION))
-                    .POST(BodyPublishers.ofString(body)).build();
+                    .POST(BodyPublishers.ofString(new ObjectMapper().writeValueAsString(new Body(messageContent)))).build();
 
             httpClient.sendAsync(request, r -> ofString(defaultCharset())).thenAccept(this.handler());
         } catch (Exception e) {
