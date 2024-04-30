@@ -25,7 +25,7 @@ public class CommandHandler {
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			var commandBuilder = literal(CommandConstants.Commands.MYSTERYSTAT)
-					.requires(Permissions.require(CommandConstants.Commands.MYSTERYSTAT, 4));
+					.requires(Permissions.require(ListScores.PERMISSION_LIST_CURRENT, 4));
 
 			subCommands.forEach(subCommandDefinition -> {
 

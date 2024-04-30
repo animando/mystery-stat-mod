@@ -16,12 +16,11 @@ import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
-import uk.co.animandosolutions.mcdev.mysterystat.utils.Logger;
 
 public class ListScores implements CommandDefinition {
 
 	static final String PERMISSION_LIST_ANY = "mysterystat.list.any";
-	static final String PERMISSION_LIST_CURRENT = "mysterystat.list.current";
+	public static final String PERMISSION_LIST_CURRENT = "mysterystat.list.current";
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
