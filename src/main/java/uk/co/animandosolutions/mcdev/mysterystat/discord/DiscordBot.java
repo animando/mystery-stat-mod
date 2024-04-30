@@ -3,7 +3,6 @@ package uk.co.animandosolutions.mcdev.mysterystat.discord;
 import static java.lang.String.format;
 import static java.net.http.HttpResponse.BodySubscribers.ofString;
 import static java.nio.charset.Charset.defaultCharset;
-import static uk.co.animandosolutions.mcdev.mysterystat.config.ConfigWrapper.CONFIG;
 import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 import java.net.URI;
@@ -15,6 +14,7 @@ import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import uk.co.animandosolutions.mcdev.mysterystat.config.DiscordConfig;
 import uk.co.animandosolutions.mcdev.mysterystat.utils.Logger;
 
 public class DiscordBot {
@@ -33,6 +33,8 @@ public class DiscordBot {
     }
 
     public static DiscordBot INSTANCE = new DiscordBot();
+    
+    private DiscordConfig CONFIG = DiscordConfig.INSTANCE;
 
     static record Body(String content) {
     }

@@ -1,6 +1,5 @@
 package uk.co.animandosolutions.mcdev.mysterystat;
 
-import static uk.co.animandosolutions.mcdev.mysterystat.config.ConfigWrapper.CONFIG;
 import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 import net.fabricmc.api.ModInitializer;
@@ -18,7 +17,6 @@ public class MysteryStatMod implements ModInitializer {
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
 
-    	CONFIG.checkConfig();
         LOGGER.info("Loaded MysteryStat mod");
 
         CommandHandler.INSTANCE.registerCommands();

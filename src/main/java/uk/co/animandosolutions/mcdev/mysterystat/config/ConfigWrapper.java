@@ -1,7 +1,10 @@
 package uk.co.animandosolutions.mcdev.mysterystat.config;
 
-import com.uchuhimo.konf.Config;
+import static java.lang.String.format;
+
 import com.uchuhimo.konf.BaseConfig;
+import com.uchuhimo.konf.Config;
+import com.uchuhimo.konf.ConfigSpec;
 import com.uchuhimo.konf.source.toml.TomlProvider;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -9,35 +12,30 @@ import uk.co.animandosolutions.mcdev.mysterystat.utils.Logger;
 
 public class ConfigWrapper {
 
-	public static final ConfigWrapper CONFIG = new ConfigWrapper();
 	private Config konfConfig;
 
-	private ConfigWrapper() {
-
+	public ConfigWrapper(final ConfigSpec spec, final String filename) {
+	    
 		var c = new BaseConfig() {
 		};
-		c.addSpec(DiscordSpec.spec);
-		var defaultSource = TomlProvider.get().resource("mysterystat.toml", true);
-		var configFile = FabricLoader.getInstance().getConfigDir().resolve("mysterystat.toml").toFile();
+		c.addSpec(spec);
+		var defaultSource = TomlProvider.get().resource(filename, true);
+		this.konfConfig = c.withSource(defaultSource);
+		var configFile = FabricLoader.getInstance().getConfigDir().resolve(filename).toFile();
 		try {
-			configFile.createNewFile();
+		    if (!configFile.exists()) {
+    			configFile.createNewFile();
+    			new com.uchuhimo.konf.source.toml.TomlWriter(this.konfConfig).toFile(configFile);
+		    }
 		} catch (Exception e) {
-			Logger.LOGGER.error("Error creating mysterystat.toml", e);
+			Logger.LOGGER.error(format("Error creating %s", filename), e);
 		}
 		var configFileSource = TomlProvider.get().file(configFile, false);
-		this.konfConfig = c.withSource(defaultSource).withSource(configFileSource);
+		this.konfConfig = this.konfConfig.withSource(configFileSource);
 	}
 
-	public void checkConfig() {
-		Logger.LOGGER.info("" + this.konfConfig);
-	}
-
-	public long discordChannelId() {
-		return this.konfConfig.get("discord.channelId");
-	}
-
-	public String discordBotToken() {
-		return this.konfConfig.get("discord.token");
+	public <T> T getValue(final String key, final Class<T> clazz) {
+		return this.konfConfig.get(key);
 	}
 
 }
