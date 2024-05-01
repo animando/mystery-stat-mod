@@ -17,7 +17,6 @@ https://discord.gg/Tuywdy59KX
 ## Dependencies
 
 - [fabric-api](https://modrinth.com/mod/fabric-api)
-- [fabric-permissions-api](https://modrinth.com/mod/fabric-permissions-api)
 
 ## Installation
 
