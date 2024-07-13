@@ -1,35 +1,28 @@
 package uk.co.animandosolutions.mcdev.mysterystat.config;
 
-import com.uchuhimo.konf.ConfigSpec;
-import com.uchuhimo.konf.RequiredItem;
+import java.io.IOException;
+import java.util.Optional;
 
 public class DiscordConfig {
-    static class Spec {
-        public static final ConfigSpec spec = new ConfigSpec("discord");
-
-        public static final RequiredItem<Long> channelId = new RequiredItem<>(spec, "channelId") {
-        };
-
-        public static final RequiredItem<String> token = new RequiredItem<>(spec, "token") {
-        };
-
-    }
 
 	public static final DiscordConfig INSTANCE = new DiscordConfig();
+    private Optional<ConfigHelper> configHelper;
 	
-	
-	private ConfigWrapper _config;
-
 	private DiscordConfig() {
-	    this._config = new ConfigWrapper(Spec.spec, "mysterystat.toml");
+
+	    try {
+	        this.configHelper = Optional.of(new ConfigHelper("mysterystat.toml"));
+	    }  catch (IOException e) {
+	        this.configHelper = Optional.empty();
+	    }
 	}
 
 	public long discordChannelId() {
-		return this._config.getValue("discord.channelId", Long.class);
+	    return configHelper.map(h -> h.getLongConfigValue("discord.channelId")).orElseThrow();
 	}
 
 	public String discordBotToken() {
-        return this._config.getValue("discord.token", String.class);
+        return configHelper.map(h -> h.getStringConfigValue("discord.token")).orElseThrow();
 	}
 
 }

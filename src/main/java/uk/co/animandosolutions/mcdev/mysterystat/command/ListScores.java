@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.command.ServerCommandSource;
+import uk.co.animandosolutions.mcdev.mysterystat.config.DiscordConfig;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.MysteryObjectiveSuggestionProvider;
 import uk.co.animandosolutions.mcdev.mysterystat.objectives.ObjectiveHelper;
 
@@ -24,6 +25,7 @@ public class ListScores implements CommandDefinition {
 
 	@Override
 	public int execute(CommandContext<ServerCommandSource> context) {
+	    DiscordConfig.INSTANCE.discordBotToken();
 		ServerCommandSource source = context.getSource();
 		var scoreboard = context.getSource().getServer().getScoreboard();
 		Optional<String> objectiveNameArg = getArgument(context, CommandConstants.Arguments.OBJECTIVE_NAME)

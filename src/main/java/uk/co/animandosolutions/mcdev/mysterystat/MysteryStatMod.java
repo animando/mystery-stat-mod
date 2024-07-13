@@ -4,6 +4,7 @@ import static uk.co.animandosolutions.mcdev.mysterystat.utils.Logger.LOGGER;
 
 import net.fabricmc.api.ModInitializer;
 import uk.co.animandosolutions.mcdev.mysterystat.command.CommandHandler;
+import uk.co.animandosolutions.mcdev.mysterystat.config.DiscordConfig;
 import uk.co.animandosolutions.mcdev.mysterystat.discord.DiscordBot;
 
 public class MysteryStatMod implements ModInitializer {
@@ -19,6 +20,8 @@ public class MysteryStatMod implements ModInitializer {
 
         LOGGER.info("Loaded MysteryStat mod");
 
+        LOGGER.info(String.format("Discord token: %s", DiscordConfig.INSTANCE.discordBotToken()));
+        LOGGER.info(String.format("Discord channel: %s", DiscordConfig.INSTANCE.discordChannelId()));
         CommandHandler.INSTANCE.registerCommands();
     }
 } 
